@@ -25,10 +25,15 @@ class AppServices {
 
 Future<AppServices> bootstrapServices() async {
   if (ApiConstants.supabaseUrl.isEmpty || ApiConstants.supabaseKey.isEmpty) {
-    throw StateError('Missing SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY. '
-        'Run with: flutter run --dart-define-from-file=env.json (env.json must be valid JSON).');
+    throw StateError(
+      'Missing SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY. '
+      'Run with: flutter run --dart-define-from-file=env.json (env.json must be valid JSON).',
+    );
   }
-  await Supabase.initialize(url: ApiConstants.supabaseUrl, anonKey: ApiConstants.supabaseKey);
+  await Supabase.initialize(
+    url: ApiConstants.supabaseUrl,
+    publishableKey: ApiConstants.supabaseKey,
+  );
 
   final api = createSupabaseReportApi();
   return AppServices(

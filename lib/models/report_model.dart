@@ -13,6 +13,8 @@ class ReportModel {
   final DateTime updatedAt;
   final String? roomNumber; // display only, from nested rooms
   final String? buildingName; // display only, from nested rooms.buildings
+  final String? reporterName; // display only, from nested profiles
+  final String? reporterStudentNumber; // display only, from nested profiles
 
   const ReportModel({
     required this.id,
@@ -29,12 +31,15 @@ class ReportModel {
     required this.updatedAt,
     this.roomNumber,
     this.buildingName,
+    this.reporterName,
+    this.reporterStudentNumber,
   });
 
   /// Select with: /reports?select=*,rooms(id,room_number,buildings(id,name))
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     final room = json['rooms'] as Map<String, dynamic>?;
     final building = room?['buildings'] as Map<String, dynamic>?;
+    final reporter = json['profiles'] as Map<String, dynamic>?;
     return ReportModel(
       id: json['id'] as String,
       reporterId: json['reporter_id'] as String,
@@ -52,6 +57,8 @@ class ReportModel {
       updatedAt: DateTime.parse(json['updated_at'] as String).toLocal(),
       roomNumber: room?['room_number'] as String?,
       buildingName: building?['name'] as String?,
+      reporterName: reporter?['full_name'] as String?,
+      reporterStudentNumber: reporter?['student_number'] as String?,
     );
   }
 
@@ -72,6 +79,10 @@ class ReportModel {
         'rooms': {
           'room_number': roomNumber,
           'buildings': {'name': buildingName},
+        },
+        'profiles': {
+          'full_name': reporterName,
+          'student_number': reporterStudentNumber,
         },
       };
 

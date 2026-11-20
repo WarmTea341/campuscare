@@ -67,6 +67,7 @@ Future<void> main() async {
   check(created.status == 'Pending' && created.description == null,
       'create: Pending, blank description stored as null');
   check(created.buildingName != null, 'create: nested room/building returned');
+  check(created.reporterName != null, 'create: nested reporter name returned');
 
   final history = await student.listHistory(created.id);
   check(history.length == 1, 'history has the submitted event');
@@ -105,6 +106,7 @@ Future<void> main() async {
 
   final seenByAdmin = await admin.getReport(created.id);
   check(seenByAdmin.status == 'Verified', 'admin can read the student report');
+  check(seenByAdmin.reporterName != null, 'admin sees the reporter name on the report');
   final history2 = await student.listHistory(created.id);
   check(history2.length == 2, 'student sees the status change in history');
 

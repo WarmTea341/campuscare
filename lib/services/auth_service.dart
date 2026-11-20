@@ -25,9 +25,7 @@ class AuthService {
   final AuthBackend _backend;
   final ReportApiService _api;
 
-  AuthService({required AuthBackend backend, required ReportApiService api})
-      : _backend = backend,
-        _api = api;
+  AuthService({required this._backend, required this._api});
 
   Future<ProfileModel> signIn(String email, String password) async {
     final cleanEmail = email.trim().toLowerCase();

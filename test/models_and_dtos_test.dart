@@ -27,6 +27,7 @@ void main() {
       'room_number': 'T-101',
       'buildings': {'id': 'b1', 'name': 'Building A'},
     },
+    'profiles': {'full_name': 'Test Student', 'student_number': '240001'},
   };
 
   group('ReportModel', () {
@@ -35,6 +36,8 @@ void main() {
       expect(r.issueDetails, ['Not Cooling', 'Making Noise']);
       expect(r.buildingName, 'Building A');
       expect(r.roomNumber, 'T-101');
+      expect(r.reporterName, 'Test Student');
+      expect(r.reporterStudentNumber, '240001');
       expect(r.displayTitle, 'AC - Building A, T-101');
       expect(r.isPending, false);
       expect(r.createdAt.toUtc().hour, 1);
@@ -64,6 +67,7 @@ void main() {
       expect(b.issueDetails, a.issueDetails);
       expect(b.createdAt, a.createdAt);
       expect(b.buildingName, a.buildingName);
+      expect(b.reporterName, a.reporterName);
     });
   });
 
