@@ -31,5 +31,11 @@ class SupabaseAuthBackend implements AuthBackend {
   }
 
   @override
-  Future<void> signOut() => _auth.signOut();
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } on AuthRetryableFetchException catch (e) {
+      throw ApiException.network(e);
+    }
+  }
 }

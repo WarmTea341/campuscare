@@ -25,3 +25,13 @@ Route arguments are read with `Get.arguments` (see lib/routes/app_routes.dart).
 | ReportListController | reports, statusFilter, isLoading, isLoadingMore, hasMore, errorMessage | reload(), loadMore(), setFilter(status) |
 | ReportFormController | buildings, rooms, selectedBuilding, selectedRoom, category, selectedTags, description, newPhoto, removeExistingPhoto, isLoading, isSubmitting, formError, errorMessage, warningMessage; getter quickTagOptions | selectBuilding, selectRoom, setCategory, toggleTag, setDescription, pickPhoto(source), clearPickedPhoto(), submit() -> bool |
 | ReportDetailController | report, history, photoUrl, isLoading, isBusy, errorMessage; getters canEditOrDelete, nextStatus | deleteReport() -> bool, triage(priority:, notes:) -> bool |
+
+## Splash (AuthController.restore)
+- `restore()` runs once after the first frame; the splash does NOT call it on open.
+- `SplashView`: `Obx` -> if `isRestoring` show a spinner; else if `errorMessage` is not empty show the
+  message and a retry button that calls `Get.find<AuthController>().restore()`.
+- If the user is signed out the controller navigates to Login by itself.
+
+## Sign out
+- `signOut()` navigates to Login on success. If it fails (offline) it sets `errorMessage` and stays put:
+  show the message in a snackbar.
