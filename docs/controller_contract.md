@@ -35,3 +35,11 @@ Route arguments are read with `Get.arguments` (see lib/routes/app_routes.dart).
 ## Sign out
 - `signOut()` navigates to Login on success. If it fails (offline) it sets `errorMessage` and stays put:
   show the message in a snackbar.
+
+## Report list (both home screens)
+- `ReportListController` loads the first page itself; widgets never call `load()`.
+- Pull-to-refresh -> `reload()`. Near the end of the list -> `loadMore()`.
+- Filter chips -> `setFilter(status)` with a value from `ReportStatus.all`, or `null` for "All".
+- After returning from the form or detail screen with `true` -> `reload()`.
+- Empty state: show it when `isEmptyState` is true. Error banner: when `errorMessage` is not empty
+  (the rows already on screen stay visible).

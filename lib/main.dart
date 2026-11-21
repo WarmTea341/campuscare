@@ -37,18 +37,26 @@ class _BootAppState extends State<BootApp> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return MaterialApp(
-            home: Scaffold(
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text('Startup failed:\n${snapshot.error}'),
+            debugShowCheckedModeBanner: false,
+            // onGenerateRoute (not home): on web the browser URL may be any path, e.g. /login.
+            onGenerateRoute: (_) => MaterialPageRoute<void>(
+              builder: (_) => Scaffold(
+                body: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text('Startup failed:\n${snapshot.error}'),
+                  ),
                 ),
               ),
             ),
           );
         }
         if (snapshot.connectionState != ConnectionState.done) {
-          return const MaterialApp(home: SplashView());
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: (_) =>
+                MaterialPageRoute<void>(builder: (_) => const SplashView()),
+          );
         }
         return const CampusCareApp();
       },
