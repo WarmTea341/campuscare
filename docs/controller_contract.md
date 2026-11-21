@@ -43,3 +43,28 @@ Route arguments are read with `Get.arguments` (see lib/routes/app_routes.dart).
 - After returning from the form or detail screen with `true` -> `reload()`.
 - Empty state: show it when `isEmptyState` is true. Error banner: when `errorMessage` is not empty
   (the rows already on screen stay visible).
+
+## Report detail
+- Created with the report id from `Get.arguments` (String). It loads itself; use `load()` only for pull-to-refresh.
+- Photo: if `report.photoPath != null && photoUrl == null` show "Photo unavailable" (the report itself still shows).
+- Student: show Edit/Delete only while `canEditOrDelete`. `deleteReport()` -> on `true` call `Get.back(result: true)`.
+- Admin: show the triage panel only while `canTriage`; the next status is `nextStatus` (read-only, no free choice).
+  Moving to Verified needs a priority picked from `ReportPriority.all`. `triage(priority:, notes:)` -> on `true`
+  the screen already refreshed itself.
+- `isBusy` true -> disable the buttons (prevents double taps).
+- Pop back to the list with `Get.back(result: true)` after any change so the list calls `reload()`.
+
+## Report form (create & edit)
+- Created with `Get.arguments as ReportModel?` (`null` = create, non-null = edit that `Pending` report).
+  It loads buildings (and prefills fields in edit mode) itself; widgets never call `load()`.
+- Building dropdown -> `buildings` / `selectedBuilding`, `onChanged: c.selectBuilding`.
+- Room dropdown -> `rooms` / `selectedRoom`, `onChanged: c.selectRoom`.
+- Category selector -> `ReportCategory.all` / `category`, `onChanged: c.setCategory`.
+- Quick-tag chips -> `c.quickTagOptions`, selected state `c.selectedTags.contains(tag)`, `onSelected: (_) => c.toggleTag(tag)`.
+- Description field -> `onChanged: c.setDescription` (initialize `TextEditingController(text: c.description.value)`).
+- Photo picker -> `pickPhoto(ImageSource.camera)` / `pickPhoto(ImageSource.gallery)`.
+  Show preview from `newPhoto` if non-null; else show saved photo indicator when `hasExistingPhoto` is true.
+  Clear/remove button -> `clearPickedPhoto()`.
+- Inline validation -> show `formError` when non-empty.
+- Submit button -> disable while `isSubmitting` is true. On `await c.submit() == true`:
+  if `c.warningMessage.isNotEmpty`, show it in a snackbar/banner, then call `Get.back(result: true)`.
